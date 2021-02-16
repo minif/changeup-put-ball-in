@@ -8,6 +8,19 @@
 /*----------------------------------------------------------------------------*/
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// Ldrive               motor         10              
+// Larm                 motor         9               
+// Lintake              motor         12              
+// Sintake              motor         20              
+// Rdrive               motor         1               
+// Rarm                 motor         2               
+// Rintake              motor         11              
+// Tintake              motor         4               
+// Visions              vision        5               
+// RangeFinderG         sonar         G, H            
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -65,7 +78,14 @@ void autonomous(void) {
 
 void usercontrol(void) {
   // User control code here, inside the loop
+  int xspeed, yspeed;
   while (1) {
+
+    xspeed = Controller1.Axis3.value();
+    yspeed = Controller1.Axis4.value();
+
+    Ldrive.spin(directionType::fwd,yspeed+xspeed,velocityUnits::rpm);
+    Rdrive.spin(directionType::fwd,yspeed-xspeed,velocityUnits::rpm);
     // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based on feedback from the joysticks.
