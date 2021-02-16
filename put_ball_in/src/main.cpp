@@ -28,6 +28,8 @@
 
 using namespace vex;
 
+int xspeed, yspeed, armspeed, inspeed, armctrl, gamemode;
+
 // A global instance of competition
 competition Competition;
 
@@ -44,11 +46,30 @@ competition Competition;
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
+  armctrl = 0;
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
+}
+
+int armctrlback = 0;
+
+void updateMotors() {
+  Ldrive.spin(directionType::fwd,yspeed+xspeed,velocityUnits::rpm);
+  Rdrive.spin(directionType::fwd,yspeed-xspeed,velocityUnits::rpm);
+
+  Rintake.spin(directionType::fwd,inspeed,velocityUnits::rpm);
+  Tintake.spin(directionType::fwd,inspeed,velocityUnits::rpm);
+  Lintake.spin(directionType::fwd,-inspeed,velocityUnits::rpm);
+
+  Larm.spin(directionType::fwd,armspeed,velocityUnits::rpm);
+  Rarm.spin(directionType::fwd,-armspeed,velocityUnits::rpm);
+
+  if (armctrl != armctrlback) {
+    armctrlback = armctrl;
+  }
 }
 
 /*---------------------------------------------------------------------------*/
@@ -80,18 +101,17 @@ void autonomous(void) {
 
 void usercontrol(void) {
   // User control code here, inside the loop
-  int xspeed, yspeed;
   while (1) {
 
-    xspeed = Controller1.Axis3.value();
-    yspeed = Controller1.Axis4.value();
+    switch(gamemode) {
+      case GM_USER: 
+      userCtrl();
+      break;
+    }
 
-    scanMode();
-    pickupMode();
+    updateMotors();
     //Brain.Screen.print("no");
 
-    Ldrive.spin(directionType::fwd,yspeed+xspeed,velocityUnits::rpm);
-    Rdrive.spin(directionType::fwd,yspeed-xspeed,velocityUnits::rpm);
     // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based on feedback from the joysticks.
