@@ -24,6 +24,7 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
+#include "auto.h"
 
 using namespace vex;
 
@@ -66,6 +67,7 @@ void autonomous(void) {
   // ..........................................................................
 }
 
+
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              User Control Task                            */
@@ -83,6 +85,10 @@ void usercontrol(void) {
 
     xspeed = Controller1.Axis3.value();
     yspeed = Controller1.Axis4.value();
+
+    scanMode();
+    pickupMode();
+    //Brain.Screen.print("no");
 
     Ldrive.spin(directionType::fwd,yspeed+xspeed,velocityUnits::rpm);
     Rdrive.spin(directionType::fwd,yspeed-xspeed,velocityUnits::rpm);
