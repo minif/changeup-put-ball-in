@@ -22,7 +22,7 @@ extern signature Visions__SIG_5;
 extern signature Visions__SIG_6;
 extern signature Visions__SIG_7;
 extern vision Visions;
-extern sonar RangeFinderG;
+extern sonar Sonar;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

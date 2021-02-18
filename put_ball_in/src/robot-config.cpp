@@ -22,7 +22,7 @@ signature Visions__BBLUE = signature (1, -3101, -391, -1746, 1495, 9135, 5314, 0
 signature Visions__RRED = signature (2, 3029, 7281, 5156, -1957, 1, -978, 1.4, 0);
 vision Visions = vision (PORT5, 50, Visions__BBLUE, Visions__RRED);
 /*vex-vision-config:end*/
-sonar RangeFinderG = sonar(Brain.ThreeWirePort.G);
+sonar Sonar = sonar(Brain.ThreeWirePort.G);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
