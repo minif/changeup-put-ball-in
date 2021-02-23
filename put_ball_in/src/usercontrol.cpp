@@ -12,6 +12,13 @@ bool buttonPushingUL = false;
 bool buttonPushingDL = false;
 
 void userCtrl() {
+  //Determine if a button is pressed this cycle
+  if (Controller1.ButtonUp.pressing() && !buttonPushingUL) buttonPushingU = true;
+  else buttonPushingU = false;
+
+  if (Controller1.ButtonDown.pressing() && !buttonPushingDL) buttonPushingD = true;
+  else buttonPushingD = false;
+
   //User Control
   xspeed = Controller1.Axis3.value();
   yspeed = Controller1.Axis4.value();
@@ -24,20 +31,18 @@ void userCtrl() {
   else if (Controller1.ButtonL2.pressing()) armspeed = C_ARMSPEED;
   else armspeed = 0;
 
-  if (Controller1.ButtonUp.pressing() && !buttonPushingUL) buttonPushingU = true;
-  else buttonPushingU = false;
-
-  if (Controller1.ButtonDown.pressing() && !buttonPushingDL) buttonPushingD = true;
-  else buttonPushingD = false;
-
-  if (buttonPushingU) armctrl = -64;
-  else if (buttonPushingD) armctrl = 64;
-  else armctrl = 0;
+  if (buttonPushingU) armctrl += -64;
+  else if (buttonPushingD) armctrl += 64;
 
   if (Controller1.ButtonA.pressing()) {
-    gamemode = GM_BALLPICKUP;
+    gamemode = GM_SCANNING;
   }
 
+  if (Controller1.ButtonX.pressing()) {
+    pickupMode();
+  }
+
+  //Remember last input for next cycle
   buttonPushingUL = Controller1.ButtonUp.pressing();
   buttonPushingDL = Controller1.ButtonDown.pressing();
 }

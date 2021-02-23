@@ -32,7 +32,7 @@ using namespace vex;
 int xspeed, yspeed, armspeed, inspeed, armctrl, gamemode;
 
 //Ranges for intake control motor
-const int inControlMin = -400;
+const int inControlMin = -330;
 const int inControlMax = 0;
 
 //Variables for camera
@@ -65,7 +65,7 @@ competition Competition;
 
 void pre_auton(void) {
   armctrl = 0;
-  picDebug = false;
+  picDebug = true;
   initCamera();
 
   // Initializing Robot Configuration. DO NOT REMOVE!
@@ -74,6 +74,7 @@ void pre_auton(void) {
   // Example: clearing encoders, setting servo positions, ...
 }
 
+//Find average x position from all of the points
 void findbestx(int index) {
   tempx = 0;
   for (int i=0; i<piccount; i++) {
@@ -85,6 +86,7 @@ void findbestx(int index) {
     
 }
 
+//Find average y position from all of the points
 void findbesty(int index) {
   tempy = 0;
   for (int i=0; i<piccount; i++) {
@@ -98,6 +100,7 @@ void findbesty(int index) {
 
 int x, xl, y, yl; // Variables for drawing debug
 
+//Take a picture with color sensor
 void takePicture() {
   //Deal with red
   Visions.takeSnapshot(Visions__BBLUE);
@@ -129,6 +132,7 @@ void takePicture() {
 
 int armctrlback = 0;
 
+//Update all the motors
 void updateMotors() {
   Ldrive.spin(directionType::fwd,yspeed+xspeed,velocityUnits::rpm);
   Rdrive.spin(directionType::fwd,yspeed-xspeed,velocityUnits::rpm);
@@ -140,15 +144,16 @@ void updateMotors() {
   Larm.spin(directionType::fwd,armspeed,velocityUnits::rpm);
   Rarm.spin(directionType::fwd,-armspeed,velocityUnits::rpm);
 
+  //Check if intake arm control is within specified range
+  if (armctrl < inControlMin) {
+    armctrl = inControlMin;
+  } else if (armctrl > inControlMax) {
+    armctrl = inControlMax;
+  }
+
   if (armctrl != armctrlback) {
-    if (armctrl < inControlMin) {
-      armctrlback = inControlMin;
-    } else if (armctrl > inControlMax) {
-      armctrlback = inControlMax;
-    } else {
-      armctrlback = armctrl;
-      Sintake.rotateTo(armctrl,rotationUnits::deg);
-    }
+    armctrlback = armctrl;
+    Sintake.rotateTo(armctrl,rotationUnits::deg);
   }
 }
 
