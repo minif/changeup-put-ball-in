@@ -1,9 +1,9 @@
-/* ---------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       VEX                                                       */
-/*    Created:      Thu Feb  2021                                             */    
-/*    Description:  Competition Template                                      */
+/*    Author:       Minif                                                     */
+/*    Created:      Feb 2021                                                  */    
+/*    Description:  Vex Robotics Changeup - Main state loops                  */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -35,8 +35,11 @@ int xspeed, yspeed, armspeed, inspeed, armctrl, gamemode;
 const int inControlMin = -330;
 const int inControlMax = 0;
 
+//Average limitation
+const int picmax = 150;
+
 //Variables for camera
-int tempx, tempy, piccount, bestx, besty, fc, fps, timerr;
+int tempx, tempy, piccount, bestx, besty, fc, fps, timerr, ballc;
 bool picDebug;
 
 //Init camera variables
@@ -102,6 +105,8 @@ int x, xl, y, yl; // Variables for drawing debug
 
 //Take a picture with color sensor
 void takePicture() {
+  if (picDebug) Brain.Screen.clearScreen();
+  ballc = 0;
   //Deal with red
   Visions.takeSnapshot(Visions__BBLUE);
   for (int i=0; i<Visions.objectCount; i++) {
@@ -112,6 +117,7 @@ void takePicture() {
       yl = y+ Visions.objects[i].height;
       Brain.Screen.drawRectangle(x,y,xl,yl,color::blue);
     }
+    ballc++;
     findbestx(i);
     findbesty(i);
   }
@@ -125,9 +131,15 @@ void takePicture() {
       yl = y+Visions.objects[i].height;
       Brain.Screen.drawRectangle(x,y,xl,yl,color::red);
     }
+    ballc++;
     findbestx(i);
     findbesty(i);
+    if (piccount>picmax) piccount = 5;
   }
+  Brain.Screen.setCursor(3,1);
+  Brain.Screen.print(bestx);
+  Brain.Screen.setCursor(4,1);
+  Brain.Screen.print(piccount);
 }
 
 int armctrlback = 0;
@@ -196,7 +208,7 @@ void usercontrol(void) {
 
       //Ball scanning state
       case GM_SCANNING: 
-        pickupMode();
+        scanMode();
         break;
 
       //Ball pickup state

@@ -1,12 +1,23 @@
+/* -------------------------------------------------------------------------- */
+/*                                                                            */
+/*    Module:       usercontrol.cpp                                           */
+/*    Author:       Minif                                                     */
+/*    Created:      Feb 2021                                                  */    
+/*    Description:  Vex Robotics Changeup - User control state                */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+
 #include "auto.h"
 #include "vex.h"
 
+//Sensitivity used for robot control
 int C_INSPEED = 127;
 int C_ARMSPEED = 127;
 int C_DRIVESPEED = 1;
 
-bool buttonPushingU = false;
+//States to measure when the buttons are pressed
 bool buttonPushingD = false;
+bool buttonPushingU = false;
 
 bool buttonPushingUL = false;
 bool buttonPushingDL = false;

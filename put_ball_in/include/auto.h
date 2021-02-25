@@ -1,21 +1,33 @@
-#ifndef AUTO    // To make sure you don't declare the function more than once by including the header multiple times.
+/* -------------------------------------------------------------------------- */
+/*                                                                            */
+/*    Module:       auto.h                                                    */
+/*    Author:       Minif                                                     */
+/*    Created:      Feb 2021                                                  */    
+/*    Description:  Vex Robotics Changeup - Main header file                  */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+
+#ifndef AUTO
 #define AUTO
 
+//Game states
 void scanMode();
 void pickupMode();
 void userCtrl();
 
+//Picture and sensor related
 void takePicture();
 extern bool picDebug;
-extern int tempx, tempy, piccount, bestx, besty, fc, fps, timerr;
+extern int tempx, tempy, piccount, bestx, besty, fc, fps, timerr, ballc;
 extern int solDist, pickupTime;
 
+//Gamestate related
 extern int gamemode;
 const int GM_USER = 0;
 const int GM_SCANNING = 1;
 const int GM_BALLPICKUP = 2;
-extern int xspeed, yspeed, armspeed, inspeed, armctrl;
 
-void steerY();
+//Motor related
+extern int xspeed, yspeed, armspeed, inspeed, armctrl;
 
 #endif
