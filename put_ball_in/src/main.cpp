@@ -32,7 +32,7 @@ using namespace vex;
 int xspeed, yspeed, armspeed, inspeed, armctrl, gamemode;
 
 //Ranges for intake control motor
-const int inControlMin = -330;
+const int inControlMin = -350;
 const int inControlMax = 0;
 
 //Average limitation
@@ -40,6 +40,7 @@ const int picmax = 150;
 
 //Variables for camera
 int tempx, tempy, piccount, bestx, besty, fc, fps, timerr, ballc;
+int bestxg, bestyg, piccountg;
 bool picDebug;
 
 //Init camera variables
@@ -47,6 +48,9 @@ void initCamera() {
   piccount = 0;
   bestx = 100; //100 is about center
   besty = 100;
+  bestxg = 100;
+  bestyg = 100;
+  piccountg = 0;
   fc = 0;
   timerr = Brain.timer(timeUnits::sec);
 }
@@ -96,8 +100,30 @@ void findbesty(int index) {
     tempy+=besty;
   }
   tempy+=Visions.objects[index].centerY;
-  piccount++;
   besty=(tempy)/piccount;
+    
+}
+
+//Find average x position from all of the points
+void findbestxg(int index) {
+  tempx = 0;
+  for (int i=0; i<piccountg; i++) {
+    tempx+=bestxg;
+  }
+  tempx+=Visions.objects[index].centerX;
+  piccountg++;
+  bestxg=(tempx)/piccountg;
+    
+}
+
+//Find average y position from all of the points
+void findbestyg(int index) {
+  tempy = 0;
+  for (int i=0; i<piccountg; i++) {
+    tempy+=bestyg;
+  }
+  tempy+=Visions.objects[index].centerY;
+  besty=(tempy)/piccountg;
     
 }
 
@@ -134,6 +160,21 @@ void takePicture() {
     ballc++;
     findbestx(i);
     findbesty(i);
+    if (piccount>picmax) piccount = 5;
+  }
+
+  //Deal with green
+  Visions.takeSnapshot(Visions__GGREEN);
+  for (int i=0; i<Visions.objectCount; i++) {
+    if (picDebug) {
+      x = Visions.objects[i].originX;
+      y = Visions.objects[i].originY;
+      xl = x+ Visions.objects[i].width;
+      yl = y+Visions.objects[i].height;
+      Brain.Screen.drawRectangle(x,y,xl,yl,color::green);
+    }
+    findbestxg(i);
+    findbestyg(i);
     if (piccount>picmax) piccount = 5;
   }
   Brain.Screen.setCursor(3,1);
@@ -197,6 +238,7 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
+gamemode = GM_INIT;
   // User control code here, inside the loop
   while (1) {
     //Robot state manager
@@ -214,6 +256,10 @@ void usercontrol(void) {
       //Ball pickup state
       case GM_BALLPICKUP: 
         pickupMode();
+        break;
+
+      case GM_INIT:
+        initMode();
         break;
     }
 

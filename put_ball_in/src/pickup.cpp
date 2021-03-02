@@ -17,10 +17,10 @@ const int LARGERANGE = 60;
 
 //Ranges for sonar to see
 const int BALL_FAR_DIST = 250;
-const int BALLDIST = 100;
+const int BALLDIST = 120;
 
 //Speeds for the robot to move
-const int X_SPEED = 30;
+const int X_SPEED = 60;
 const int Y_SPEED = 10;
 const int Y_SPEED_FAST = 30;
 
@@ -74,13 +74,14 @@ void pickupMode() {
   //Scan field
   takePicture();
   sonDist = Sonar.distance(distanceUnits::mm);
-
+  xspeed = X_SPEED;
   if (sonDist < BALLDIST) {
     //If ball is inside the robot being picked up
     armctrl = CTRL_CLOSE;
     inspeed=IN_SPEED;
     goneClose = true;
-  } if (sonDist < BALL_FAR_DIST) {
+    xspeed=0;
+  } else if (sonDist < BALL_FAR_DIST) {
     //Approaching a ball
     armctrl = CTRL_OPEN;
     inspeed=IN_SPEED;
@@ -93,8 +94,6 @@ void pickupMode() {
     inspeed=0;
     steerY();
   }
-
-  xspeed = X_SPEED;
 
   if (gamemode != GM_BALLPICKUP) goneClose = false;
   if (pickupTime+timeScanning < Brain.timer(timeUnits::sec)) Pickup_setGamemode(GM_SCANNING);

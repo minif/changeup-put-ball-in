@@ -16,7 +16,7 @@ extern motor Rintake;
 extern motor Tintake;
 extern signature Visions__BBLUE;
 extern signature Visions__RRED;
-extern signature Visions__SIG_3;
+extern signature Visions__GGREEN;
 extern signature Visions__SIG_4;
 extern signature Visions__SIG_5;
 extern signature Visions__SIG_6;

@@ -20,7 +20,8 @@ motor Tintake = motor(PORT4, ratio18_1, false);
 /*vex-vision-config:begin*/
 signature Visions__BBLUE = signature (1, -3101, -391, -1746, 1495, 9135, 5314, 0.9, 0);
 signature Visions__RRED = signature (2, 3029, 7281, 5156, -1957, 1, -978, 1.4, 0);
-vision Visions = vision (PORT5, 50, Visions__BBLUE, Visions__RRED);
+signature Visions__GGREEN = signature (3, -4971, -4519, -4744, -5761, -5055, -5408, 2.5, 0);
+vision Visions = vision (PORT5, 50, Visions__BBLUE, Visions__RRED, Visions__GGREEN);
 /*vex-vision-config:end*/
 sonar Sonar = sonar(Brain.ThreeWirePort.G);
 
