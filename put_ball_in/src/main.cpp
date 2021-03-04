@@ -43,6 +43,9 @@ int tempx, tempy, piccount, bestx, besty, fc, fps, timerr, ballc;
 int bestxg, bestyg, piccountg;
 bool picDebug;
 
+//Debug
+bool disableMotors;
+
 //Init camera variables
 void initCamera() {
   piccount = 0;
@@ -187,6 +190,7 @@ int armctrlback = 0;
 
 //Update all the motors
 void updateMotors() {
+  if (disableMotors) return;
   Ldrive.spin(directionType::fwd,yspeed+xspeed,velocityUnits::rpm);
   Rdrive.spin(directionType::fwd,yspeed-xspeed,velocityUnits::rpm);
 
@@ -238,7 +242,10 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-gamemode = GM_INIT;
+  //Init before loop
+  if (Controller1.ButtonDown.pressing()) disableMotors = true;
+  else disableMotors = false;
+  gamemode = GM_INIT;
   // User control code here, inside the loop
   while (1) {
     //Robot state manager
@@ -260,6 +267,10 @@ gamemode = GM_INIT;
 
       case GM_INIT:
         initMode();
+        break;
+
+      case GM_PUT:
+        putMode();
         break;
     }
 

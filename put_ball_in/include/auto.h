@@ -35,4 +35,7 @@ const int GM_PUT = 4;
 //Motor related
 extern int xspeed, yspeed, armspeed, inspeed, armctrl;
 
+//Debuug
+extern bool disableMotors;
+
 #endif

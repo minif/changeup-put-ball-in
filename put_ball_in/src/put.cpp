@@ -10,8 +10,7 @@
 #include "auto.h"
 #include "vex.h"
 
-const int ARMSPEEDFAST = -127;
-const int ARMSPEEDSLOW = -20;
+const int ARMSPEED = -160;
 
 const int ARMCTRL_OPEN = -330;
 
@@ -43,8 +42,13 @@ void Put_steerY() {
   } else yspeed = 0;
 }
 
+int i=0;
+
 void putMode() {
-  armspeed = ARMSPEEDSLOW;
+  if (Controller1.ButtonB.pressing()) gamemode = GM_USER;
+
+  armspeed = ARMSPEED - (Larm.rotation(rotationUnits::deg)/5) ;
+
   armctrl = ARMCTRL_OPEN;
 
   xspeed = XSPEED;
@@ -52,7 +56,9 @@ void putMode() {
   takePicture();
   Put_steerY();
   
-  //if (gamemode != GM_PUT) goneClose = false;
-  //if (pickupTime+timeScanning < Brain.timer(timeUnits::sec)) Pickup_setGamemode(GM_SCANNING);
-  //if (picDebug) pickup_debug();
+  i++;
+  Brain.Screen.setCursor(3,3);
+  Brain.Screen.print("up ");
+  Brain.Screen.print(armspeed);
+  Brain.Screen.print(i);
 }

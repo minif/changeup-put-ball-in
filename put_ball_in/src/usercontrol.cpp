@@ -49,6 +49,10 @@ void userCtrl() {
     gamemode = GM_SCANNING;
   }
 
+  if (Controller1.ButtonY.pressing()) {
+    gamemode = GM_PUT;
+  }
+
   if (Controller1.ButtonX.pressing()) {
     pickupMode();
   }
@@ -56,4 +60,8 @@ void userCtrl() {
   //Remember last input for next cycle
   buttonPushingUL = Controller1.ButtonUp.pressing();
   buttonPushingDL = Controller1.ButtonDown.pressing();
+
+  Brain.Screen.setCursor(3,3);
+  Brain.Screen.print("rot ");
+  Brain.Screen.print(Larm.rotation(rotationUnits::deg));
 }

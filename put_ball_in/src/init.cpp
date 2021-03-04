@@ -15,6 +15,11 @@ const int inTime = 15;
 int initTimer = inTime;
 
 void initMode() {
+  if (Controller1.ButtonB.pressing()) {
+    gamemode = GM_USER;
+    return;
+  }
+
   Brain.Screen.setCursor(3,3);
   Brain.Screen.print(initTimer);
   armspeed = -127;
