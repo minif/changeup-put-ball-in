@@ -18,7 +18,7 @@ const int Y_SPEED = 30;
 const int Y_SPEED_FAST = 30;
 
 void rotateAround() {
-  if (besty>20&&ballc > 0) {
+  if (besty>20) {
     if (bestx<MIDDLE-LARGERANGE) yspeed = Y_SPEED_FAST;
     else if (bestx<MIDDLE-SMALLRANGE) yspeed = Y_SPEED;
     else if (bestx<MIDDLE+SMALLRANGE) {

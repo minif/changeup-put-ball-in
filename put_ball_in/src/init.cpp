@@ -10,7 +10,7 @@
 #include "auto.h"
 #include "vex.h"
 
-const int inTime = 15;
+const int inTime = 8;
 
 int initTimer = inTime;
 

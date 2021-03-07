@@ -22,7 +22,10 @@ void takePicture();
 extern bool picDebug;
 extern int tempx, tempy, piccount, bestx, besty, fc, fps, timerr, ballc;
 extern int solDist, pickupTime;
+extern int bestxr, bestyr, piccountr;
 extern int bestxg, bestyg, piccountg;
+extern int bestxb, bestyb, piccountb;
+extern bool focusOnRed;
 
 //Gamestate related
 extern int gamemode;

@@ -10,7 +10,7 @@
 #include "auto.h"
 #include "vex.h"
 
-const int ARMSPEED = -160;
+const int ARMSPEED = -130;
 
 const int ARMCTRL_OPEN = -330;
 
@@ -56,9 +56,11 @@ void putMode() {
   takePicture();
   Put_steerY();
   
-  i++;
   Brain.Screen.setCursor(3,3);
-  Brain.Screen.print("up ");
-  Brain.Screen.print(armspeed);
-  Brain.Screen.print(i);
+  Brain.Screen.print("UPUPUPP ");
+  Brain.Screen.print(bestyg);
+
+  Brain.Screen.setCursor(5,3);
+  Brain.Screen.print("UPUPUPP ");
+  Brain.Screen.print(bestxg);
 }

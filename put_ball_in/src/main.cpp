@@ -37,10 +37,14 @@ const int inControlMax = 0;
 
 //Average limitation
 const int picmax = 150;
+const int denoise = 4;
 
 //Variables for camera
 int tempx, tempy, piccount, bestx, besty, fc, fps, timerr, ballc;
+int bestxr, bestyr, piccountr;
 int bestxg, bestyg, piccountg;
+int bestxb, bestyb, piccountb;
+bool focusOnRed;
 bool picDebug;
 
 //Debug
@@ -84,106 +88,102 @@ void pre_auton(void) {
   // Example: clearing encoders, setting servo positions, ...
 }
 
-//Find average x position from all of the points
-void findbestx(int index) {
-  tempx = 0;
-  for (int i=0; i<piccount; i++) {
-    tempx+=bestx;
-  }
-  tempx+=Visions.objects[index].centerX;
-  piccount++;
-  bestx=(tempx)/piccount;
-    
-}
-
-//Find average y position from all of the points
-void findbesty(int index) {
-  tempy = 0;
-  for (int i=0; i<piccount; i++) {
-    tempy+=besty;
-  }
-  tempy+=Visions.objects[index].centerY;
-  besty=(tempy)/piccount;
-    
-}
-
-//Find average x position from all of the points
-void findbestxg(int index) {
-  tempx = 0;
-  for (int i=0; i<piccountg; i++) {
-    tempx+=bestxg;
-  }
-  tempx+=Visions.objects[index].centerX;
-  piccountg++;
-  bestxg=(tempx)/piccountg;
-    
-}
-
-//Find average y position from all of the points
-void findbestyg(int index) {
-  tempy = 0;
-  for (int i=0; i<piccountg; i++) {
-    tempy+=bestyg;
-  }
-  tempy+=Visions.objects[index].centerY;
-  besty=(tempy)/piccountg;
-    
-}
-
 int x, xl, y, yl; // Variables for drawing debug
 
-//Take a picture with color sensor
-void takePicture() {
-  if (picDebug) Brain.Screen.clearScreen();
-  ballc = 0;
-  //Deal with red
-  Visions.takeSnapshot(Visions__BBLUE);
-  for (int i=0; i<Visions.objectCount; i++) {
-    if (picDebug) {
+int counter;
+
+void picDebugPrint(int color) {
+  if (picDebug) {
+    for (int i=0; i<Visions.objectCount; i++) {
       x = Visions.objects[i].originX;
       y = Visions.objects[i].originY;
       xl = x+ Visions.objects[i].width;
       yl = y+ Visions.objects[i].height;
-      Brain.Screen.drawRectangle(x,y,xl,yl,color::blue);
+      switch (color) {
+        case 0: Brain.Screen.drawRectangle(x,y,xl,yl,color::red); break;
+        case 1: Brain.Screen.drawRectangle(x,y,xl,yl,color::green); break;
+        case 2: Brain.Screen.drawRectangle(x,y,xl,yl,color::blue); break;
+      }
     }
-    ballc++;
-    findbestx(i);
-    findbesty(i);
   }
-  //Deal with blue
-  Visions.takeSnapshot(Visions__RRED);
-  for (int i=0; i<Visions.objectCount; i++) {
-    if (picDebug) {
-      x = Visions.objects[i].originX;
-      y = Visions.objects[i].originY;
-      xl = x+ Visions.objects[i].width;
-      yl = y+Visions.objects[i].height;
-      Brain.Screen.drawRectangle(x,y,xl,yl,color::red);
-    }
-    ballc++;
-    findbestx(i);
-    findbesty(i);
-    if (piccount>picmax) piccount = 5;
+}
+
+//Find average x and y for each color
+void averageRed() {
+  tempx = 0;
+  tempy = 0;
+  counter = 0;
+  for (int i=0; i<denoise; i++) {
+    Visions.takeSnapshot(Visions__RRED);
+    if (Visions.largestObject.exists) counter++;
+    tempx += Visions.largestObject.originX;
+    tempy += Visions.largestObject.originY;
+  }
+  bestxr = tempx / denoise;
+  bestyr = tempy / denoise;
+
+  if (counter < 2) {
+    bestxr = 0;
+    bestyr = 0;
   }
 
-  //Deal with green
-  Visions.takeSnapshot(Visions__GGREEN);
-  for (int i=0; i<Visions.objectCount; i++) {
-    if (picDebug) {
-      x = Visions.objects[i].originX;
-      y = Visions.objects[i].originY;
-      xl = x+ Visions.objects[i].width;
-      yl = y+Visions.objects[i].height;
-      Brain.Screen.drawRectangle(x,y,xl,yl,color::green);
-    }
-    findbestxg(i);
-    findbestyg(i);
-    if (piccount>picmax) piccount = 5;
+  picDebugPrint(0);
+}
+
+void averageBlue() {
+  tempx = 0;
+  tempy = 0;
+  for (int i=0; i<denoise; i++) {
+    Visions.takeSnapshot(Visions__BBLUE);
+    if (Visions.largestObject.exists) counter++;
+    tempx += Visions.largestObject.originX;
+    tempy += Visions.largestObject.originY;
   }
-  Brain.Screen.setCursor(3,1);
-  Brain.Screen.print(bestx);
-  Brain.Screen.setCursor(4,1);
-  Brain.Screen.print(piccount);
+  bestxb = tempx / denoise;
+  bestyb = tempy / denoise;
+
+  if (counter < 2) {
+    bestxb = 0;
+    bestyb = 0;
+  }
+
+  picDebugPrint(2);
+}
+
+void averageGreen() {
+  tempx = 0;
+  tempy = 0;
+  for (int i=0; i<denoise; i++) {
+    Visions.takeSnapshot(Visions__GGREEN);
+    if (Visions.largestObject.exists) counter++;
+    tempx += Visions.largestObject.originX;
+    tempy += Visions.largestObject.originY;
+  }
+  bestxg = tempx / denoise;
+  bestyg = tempy / denoise;
+
+  if (counter < 2) {
+    bestxg = 0;
+    bestyg = 0;
+  }
+
+  picDebugPrint(1);
+}
+
+//Take a picture with color sensor
+void takePicture() {
+  if (picDebug) Brain.Screen.clearScreen();
+  averageRed();
+  averageBlue();
+  averageGreen();
+
+  if (focusOnRed) {
+    bestx = bestxr;
+    besty = bestyr;
+  } else {
+    bestx = bestxb;
+    besty = bestyb;
+  }
 }
 
 int armctrlback = 0;

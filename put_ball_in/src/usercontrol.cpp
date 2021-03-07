@@ -57,6 +57,22 @@ void userCtrl() {
     pickupMode();
   }
 
+  if (Controller1.ButtonLeft.pressing()) {
+    focusOnRed = true;
+    Controller1.Screen.clearLine();
+    Controller1.Screen.print("Red");
+  }
+
+  if (Controller1.ButtonRight.pressing()) {
+    focusOnRed = false;
+    Controller1.Screen.clearLine();
+    Controller1.Screen.print("Blue");
+  }
+
+  takePicture();
+  Brain.Screen.print("ff");
+  Brain.Screen.print(bestx);
+
   //Remember last input for next cycle
   buttonPushingUL = Controller1.ButtonUp.pressing();
   buttonPushingDL = Controller1.ButtonDown.pressing();
