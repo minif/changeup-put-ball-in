@@ -42,8 +42,8 @@ void userCtrl() {
   else if (Controller1.ButtonL2.pressing()) armspeed = C_ARMSPEED;
   else armspeed = 0;
 
-  if (buttonPushingU) armctrl += -64;
-  else if (buttonPushingD) armctrl += 64;
+  if (buttonPushingU) armctrl += -200;
+  else if (buttonPushingD) armctrl += 200;
 
   if (Controller1.ButtonA.pressing()) {
     gamemode = GM_SCANNING;
@@ -68,6 +68,8 @@ void userCtrl() {
     Controller1.Screen.clearLine();
     Controller1.Screen.print("Blue");
   }
+
+  inspeed2 = inspeed;
 
   takePicture();
   Brain.Screen.print("ff");

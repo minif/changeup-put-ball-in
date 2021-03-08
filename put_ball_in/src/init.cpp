@@ -10,7 +10,7 @@
 #include "auto.h"
 #include "vex.h"
 
-const int inTime = 8;
+const int inTime = 50;
 
 int initTimer = inTime;
 
@@ -27,7 +27,9 @@ void initMode() {
   Brain.Screen.setCursor(4,3);
   Brain.Screen.print("initTimer");
   initTimer--;
-  if (initTimer < 0) gamemode = GM_USER;
+  if (initTimer < 40) armspeed = 50;
+  if (initTimer < 10) armspeed = 0;
+  if (initTimer < 0) gamemode = GM_AUTO;
   Brain.Screen.setCursor(5,3);
   Brain.Screen.print("initTimer");
 }

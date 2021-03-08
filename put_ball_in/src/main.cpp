@@ -29,7 +29,7 @@
 using namespace vex;
 
 //Main motor variables
-int xspeed, yspeed, armspeed, inspeed, armctrl, gamemode;
+int xspeed, yspeed, armspeed, inspeed, armctrl, gamemode, inspeed2;
 
 //Ranges for intake control motor
 const int inControlMin = -350;
@@ -198,6 +198,8 @@ void updateMotors() {
   Tintake.spin(directionType::fwd,inspeed,velocityUnits::rpm);
   Lintake.spin(directionType::fwd,-inspeed,velocityUnits::rpm);
 
+  Tintake.spin(directionType::fwd,inspeed2,velocityUnits::rpm);
+
   Larm.spin(directionType::fwd,armspeed,velocityUnits::rpm);
   Rarm.spin(directionType::fwd,-armspeed,velocityUnits::rpm);
 
@@ -214,6 +216,39 @@ void updateMotors() {
   }
 }
 
+void loop() {
+  //Robot state manager
+  switch(gamemode) {
+    //User control state
+    case GM_USER: 
+      userCtrl();
+      break;
+
+    //Ball scanning state
+    case GM_SCANNING: 
+      scanMode();
+      break;
+
+    //Ball pickup state
+    case GM_BALLPICKUP: 
+      pickupMode();
+      break;
+
+    case GM_INIT:
+      initMode();
+      break;
+
+    case GM_PUT:
+      putMode();
+      break;
+    case GM_AUTO:
+      autoMode();
+      break;
+  }
+
+  updateMotors();
+}
+
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              Autonomous Task                              */
@@ -228,6 +263,12 @@ void autonomous(void) {
   // ..........................................................................
   // Insert autonomous user code here.
   // ..........................................................................
+  gamemode = GM_INIT;
+
+  while (1) {
+    loop();
+    wait(20, msec);
+  }
 }
 
 
@@ -245,36 +286,10 @@ void usercontrol(void) {
   //Init before loop
   if (Controller1.ButtonDown.pressing()) disableMotors = true;
   else disableMotors = false;
-  gamemode = GM_INIT;
+  gamemode = GM_USER;
   // User control code here, inside the loop
   while (1) {
-    //Robot state manager
-    switch(gamemode) {
-      //User control state
-      case GM_USER: 
-        userCtrl();
-        break;
-
-      //Ball scanning state
-      case GM_SCANNING: 
-        scanMode();
-        break;
-
-      //Ball pickup state
-      case GM_BALLPICKUP: 
-        pickupMode();
-        break;
-
-      case GM_INIT:
-        initMode();
-        break;
-
-      case GM_PUT:
-        putMode();
-        break;
-    }
-
-    updateMotors();
+    loop();
 
     // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo

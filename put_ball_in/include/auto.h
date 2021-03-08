@@ -16,6 +16,7 @@ void pickupMode();
 void userCtrl();
 void initMode();
 void putMode();
+void autoMode();
 
 //Picture and sensor related
 void takePicture();
@@ -34,9 +35,10 @@ const int GM_SCANNING = 1;
 const int GM_BALLPICKUP = 2;
 const int GM_INIT = 3;
 const int GM_PUT = 4;
+const int GM_AUTO = 5;
 
 //Motor related
-extern int xspeed, yspeed, armspeed, inspeed, armctrl;
+extern int xspeed, yspeed, armspeed, inspeed, armctrl, inspeed2;
 
 //Debuug
 extern bool disableMotors;

@@ -88,14 +88,14 @@ void pickupMode() {
   } else {
     //Driving to a ball
     Brain.Screen.setCursor(10,1);
-    if (goneClose) Pickup_setGamemode(GM_SCANNING);
+    if (goneClose) Pickup_setGamemode(GM_AUTO);
     else Brain.Screen.print("not gone in yet");
     armctrl = CTRL_OPEN;
     inspeed=0;
     steerY();
   }
-
+  inspeed2 = inspeed;
   if (gamemode != GM_BALLPICKUP) goneClose = false;
-  if (pickupTime+timeScanning < Brain.timer(timeUnits::sec)) Pickup_setGamemode(GM_SCANNING);
+  if (pickupTime+timeScanning < Brain.timer(timeUnits::sec)) Pickup_setGamemode(GM_AUTO);
   if (picDebug) pickup_debug();
 }
