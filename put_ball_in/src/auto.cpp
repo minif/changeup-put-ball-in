@@ -10,8 +10,6 @@
 #include "auto.h"
 #include "vex.h"
 
-const bool FOCUSRED = true;
-
 int stage = 0;
 int ticks = 0;
 bool armUp;
@@ -24,7 +22,6 @@ void hardCodedActions() {
   xspeed = 0;
   yspeed = 0;
   
-  focusOnRed = FOCUSRED;
   ticks--;
   if (ticks < 1) {
     Controller1.Screen.print(stage);
@@ -34,7 +31,7 @@ void hardCodedActions() {
         gamemode = GM_BALLPICKUP;
         break;
       case 2: 
-        ticks = 50;
+        ticks = 200;
         xspeed = -50;
         yspeed = 0;
         break;
@@ -70,7 +67,7 @@ void auto_debug() {
   Brain.Screen.setCursor(1,1);
   Brain.Screen.print("Autonymouse1       ");
   Brain.Screen.setCursor(2,1);
-  Brain.Screen.print(bestx);
+  Brain.Screen.print(focusOnRed);
 }
 
 void autoMode() {

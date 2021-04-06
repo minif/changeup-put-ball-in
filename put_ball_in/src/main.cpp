@@ -287,11 +287,14 @@ void usercontrol(void) {
   if (Controller1.ButtonDown.pressing()) disableMotors = true;
   else disableMotors = false;
   gamemode = GM_USER;
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(0,0);
+  Controller1.Screen.print("autonymous press a plz");
+  Controller1.Screen.newLine();
+  
   // User control code here, inside the loop
   while (1) {
     loop();
-
-    // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based on feedback from the joysticks.
 

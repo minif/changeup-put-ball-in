@@ -29,7 +29,10 @@ void initMode() {
   initTimer--;
   if (initTimer < 40) armspeed = 50;
   if (initTimer < 10) armspeed = 0;
-  if (initTimer < 0) gamemode = GM_AUTO;
+  if (initTimer < 0) {
+    gamemode = GM_PUT;
+    task::sleep(1000);
+  }
   Brain.Screen.setCursor(5,3);
   Brain.Screen.print("initTimer");
 }
